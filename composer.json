@@ -1,5 +1,6 @@
 {
     "name": "chirripo/chirripo-launcher",
     "description": "Launcher for Chirripo",
-    "license": "MIT"
+    "license": "MIT",
+    "bin": ["bin/chirripo"]
 }
