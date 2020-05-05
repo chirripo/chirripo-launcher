@@ -31,6 +31,8 @@ function chirripo_launcher_main()
     $var = false;
     $version = false;
     $version_launcher = false;
+    $proxy_up = false;
+    $proxy_down = false;
     $chirripo_version = null;
 
     foreach ($_SERVER['argv'] as $arg) {
@@ -49,8 +51,26 @@ function chirripo_launcher_main()
                 case "--launcher-version":
                     $version_launcher = true;
                     break;
+
+                case "proxy-up":
+                    $proxy_up = true;
+                    break;
+
+                case "proxy-down":
+                    $proxy_down = true;
+                    break;
             }
         }
+    }
+    if ($proxy_up || $proxy_down) {
+      $command = $proxy_up ? 'chirripo-proxy up' : 'chirripo-proxy down';
+      exec($command, $output, $return_var);
+      if ($return_var) {
+          echo 'You need to install the proxy as a global package (composer global require chirripo/chirripo-proxy) and add the bin to the $PATH variable';
+          exit($return_var);
+      }
+      echo implode("", $output);
+      exit(0);
     }
     $cwd = getcwd();
     $root = chirripo_find_project_root($cwd);
