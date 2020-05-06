@@ -11,3 +11,4 @@ Launcher for [Chirripo](https://github.com/chirripo/chirripo) project.
 php composer.phar global config bin-dir --absolute
 ```
 - Use Chirripo by simply invoking `chirripo` command from any project using chirripo
+- If you have [proxy](https://github.com/chirripo/chirripo-proxy) installed; you can also manage it with `proxy-up` and `proxy-down` commands
