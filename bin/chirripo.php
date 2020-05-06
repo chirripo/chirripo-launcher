@@ -5,6 +5,8 @@
  */
 function chirripo_launcher_main()
 {
+    define('CHIRRIPO_LAUNCHER_VERSION', '1.1');
+
     set_time_limit(0);
 
     $autoloaders = [
@@ -25,8 +27,6 @@ function chirripo_launcher_main()
         echo 'You must set up the project dependencies using `composer install`' . PHP_EOL;
         exit(1);
     }
-
-    $chirripo_launcher_version = '@git-version@';
 
     $var = false;
     $version = false;
@@ -52,6 +52,7 @@ function chirripo_launcher_main()
                 break;
         }
     }
+
     if ($proxy_up || $proxy_down) {
       $command = $proxy_up ? 'chirripo-proxy up' : 'chirripo-proxy down';
       exec($command, $output, $return_var);
@@ -62,18 +63,21 @@ function chirripo_launcher_main()
       echo implode("", $output);
       exit(0);
     }
+
     $cwd = getcwd();
     $root = chirripo_find_project_root($cwd);
-    if ($root) {
-        if ($version || $version_launcher) {
-            echo "Chirripo Launcher Version: {$chirripo_launcher_version}" . PHP_EOL;
-            // @TODO: Fill in version.
-            echo "Chirripo Version: {$chirripo_version}" . PHP_EOL;
-            exit(0);
-        }
 
+    if ($root) {
         if (file_exists("${root}/vendor/chirripo/chirripo/")) {
-            require_once "${root}/vendor/chirripo/chirripo/bin/chirripo";
+            require_once "${root}/vendor/chirripo/chirripo/bin/chirripo.php";
+
+            if ($version || $version_launcher) {
+                $chirripo_version = chirripo_version();
+                echo "Chirripo Launcher Version: " . CHIRRIPO_LAUNCHER_VERSION . PHP_EOL;
+                echo "Chirripo Version: {$chirripo_version}" . PHP_EOL;
+                exit(0);
+            }
+
             exit(chirripo_main());
         }
     } else {
