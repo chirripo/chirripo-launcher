@@ -35,31 +35,21 @@ function chirripo_launcher_main()
     $proxy_down = false;
     $chirripo_version = null;
 
-    foreach ($_SERVER['argv'] as $arg) {
-        // If a variable to set was indicated on the
-        // previous iteration, then set the value of
-        // the named variable (e.g. "--version") to "$arg".
-        if ($var) {
-            $$var = "$arg";
-            $var = false;
-        } else {
-            switch ($arg) {
-                case "--version":
-                    $version = true;
-                    break;
-
-                case "--launcher-version":
-                    $version_launcher = true;
-                    break;
-
-                case "proxy-up":
-                    $proxy_up = true;
-                    break;
-
-                case "proxy-down":
-                    $proxy_down = true;
-                    break;
-            }
+    if (isset($_SERVER['argv'][1])) {
+        $arg = $_SERVER['argv'][1];
+        switch ($arg) {
+            case "--version":
+                $version = true;
+                break;
+            case "--launcher-version":
+                $version_launcher = true;
+                break;
+            case "proxy-up":
+                $proxy_up = true;
+                break;
+            case "proxy-down":
+                $proxy_down = true;
+                break;
         }
     }
     if ($proxy_up || $proxy_down) {
