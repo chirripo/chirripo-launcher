@@ -11,11 +11,11 @@ before_install:
   - cd testchirripo
   - echo "PROJECT_ROOT=~/testchirripo" >> .env
   - composer install
-  - composer global config repositories.chirripo-launcher path $TRAVIS_BUILD_DIR
+  - cd $TRAVIS_BUILD_DIR
+  - composer install
   - ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa <<< y
 before_script:
-  - composer global require chirripo/chirripo-launcher:"*"
-  - export PATH=`composer global config bin-dir --absolute`:$PATH
+  - export PATH=$TRAVIS_BUILD_DIR/bin:$PATH
 
 script:
   - cd ~/testchirripo
