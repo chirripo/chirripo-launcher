@@ -15,7 +15,7 @@ before_install:
   - ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa <<< y
 before_script:
   - composer global require chirripo/chirripo-launcher:"*"
-  - ln -s `composer global config bin-dir --absolute`/chirripo /usr/bin/chirripo
+  - ln -s `composer global config bin-dir --absolute`/chirripo /usr/local/bin/chirripo
 
 script:
   - cd ~/testchirripo
