@@ -13,7 +13,6 @@ before_install:
   - composer install
   - cd $TRAVIS_BUILD_DIR
   - composer install
-  - ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa <<< y
 before_script:
   - export PATH=$TRAVIS_BUILD_DIR/bin:$PATH
 
