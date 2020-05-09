@@ -1,0 +1,23 @@
+language: php
+php:
+  - 7.2
+  - 7.3
+  - 7.4
+env:
+  - COMPOSER_MEMORY_LIMIT=-1 COMPOSER_MIRROR_PATH_REPOS=1
+before_install:
+  - cd ~
+  - composer create-project chirripo/drupal-template testchirripo --stability stable --no-interaction
+  - cd testchirripo
+  - echo "PROJECT_ROOT=~/testchirripo" >> .env
+  - composer install
+  - composer global config repositories.chirripo-launcher path $TRAVIS_BUILD_DIR
+  - ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa <<< y
+before_script:
+  - composer global require chirripo/chirripo-launcher:"*"
+  - ln -s `composer global config bin-dir --absolute`/chirripo /usr/bin/chirripo
+
+script:
+  - cd ~/testchirripo
+  - chirripo --version
+  - chirripo ps
