@@ -1,22 +1,38 @@
 language: php
 php:
-  - 7.2
-  - 7.3
-  - 7.4
+- 7.2
+- 7.3
+- 7.4
 env:
+  matrix:
   - COMPOSER_MEMORY_LIMIT=-1 COMPOSER_MIRROR_PATH_REPOS=1
 before_install:
-  - cd ~
-  - composer create-project chirripo/drupal-template testchirripo --stability stable --no-interaction
-  - cd testchirripo
-  - echo "PROJECT_ROOT=~/testchirripo" >> .env
-  - composer install
-  - cd $TRAVIS_BUILD_DIR
-  - composer install
+- cd ~
+- composer create-project chirripo/drupal-template testchirripo --stability stable
+  --no-interaction
+- cd testchirripo
+- echo "PROJECT_ROOT=~/testchirripo" >> .env
+- composer install
+- cd $TRAVIS_BUILD_DIR
+- composer install
 before_script:
-  - export PATH=$TRAVIS_BUILD_DIR/bin:$PATH
-
+- export PATH=$TRAVIS_BUILD_DIR/bin:$PATH
 script:
-  - cd ~/testchirripo
-  - chirripo --version
-  - chirripo ps
+- cd ~/testchirripo
+- chirripo --version
+- chirripo ps
+before_deploy:
+- curl -LSs https://box-project.github.io/box2/installer.php | php
+- "./box.phar build"
+- sha1sum chirripo.phar > chirripo.version
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: VtxNV6mUPVl3gHbzw16wb/fAGkBkRGHmTK/Fg8e7QOZAvOtnA5CBC8GNm74vmYrKGaH1I01+msdA+ajgGMeKnOvb7EUPC/aLg39CcBfuWNg1GVJmC10MYv8ahcSlVI/dUvwsdao8vN1+BmnMRui5eVVhKOP4Kpgmr2EQdHTm+3yG3xzWL5cFfKSIkXRafOVXsM7g5JyXV8u1r2CDZN/IcziGzMwXoaa6Q6AWmuEXvwIz122ibuIjzOnDaJ+DESs6iuKXjB6GZxuyReCbCUWESo75yDrgINNPKnefsVArsXaHSilTCRAOFhZr93KuWw+ohKhKwVU0BD1guEGz0WCX4Sf7YbRIEh0YeIPJWS7CtwpeUGAquW02dO+13T1P7j3HgDl7Pc7Ct67vdkQO9zFVLJUApBWY4GuG4YTBysRwcgAPNwzMNpk/cabG+kaFhgycJK5GlTzJwSU5d3DUIuEPWQHU4dFu2RJGwYJB7f17eTWOf4IsdME4+UdnNVF3ceODd6BZKNIdhTmMk++l69eMFOCVmwS5KjRYvtion7a1rIhHtv7J3tvNOPaeOWtLVAvxZw5FPQ45206gfqf7LT70T0i6AeB3Pql7YkyybBuFdWDnMWAaGHEWCT+WaWxKHVWZgMrqNG/a97SEfdR6Gk4eBoKIUlzDfayHW4E/k8LM8SI=
+  file:
+  - chirripo.phar
+  - chirripo.version
+  on:
+    repo: chirripo/chirripo-launcher
+    tags: true
