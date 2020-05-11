@@ -5,7 +5,7 @@
  */
 function chirripo_launcher_main()
 {
-    define('CHIRRIPO_LAUNCHER_VERSION', '1.2');
+    define('CHIRRIPO_LAUNCHER_VERSION', '1.3');
 
     set_time_limit(0);
 
